@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      target: production
+
+    ports:
+      - 4568:4568

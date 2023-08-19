@@ -1,0 +1,8 @@
+{
+  "elastic": {
+    "node": "http://localhost:9200", 
+    "username": "elastic",
+    "password": "QwertyWeb123"
+  }
+}
+

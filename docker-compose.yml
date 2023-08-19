@@ -1,0 +1,49 @@
+version: "3.8"
+services:
+  api:
+    build: 
+      context: ./backend
+      target: production
+    environment:
+      PORT: 4568
+      ELASTICSEARCH_NODE: http://elasticsearch:9200
+      ELASTICSEARCH_USERNAME: elastic
+      ELASTICSEARCH_PASSWORD: QwertyWeb123
+    ports:
+      - 4568:4568
+    links:
+        - elasticsearch
+    depends_on:
+        - elasticsearch
+    networks: 
+      - esnet
+  tiktok:
+    build: ./python
+    ports:
+      - 5000:8000
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.14.0
+    container_name: elasticsearch
+    environment:
+      - ELASTICSEARCH_USERNAME=elastic
+      - ELASTICSEARCH_PASSWORD=QwertyWeb123
+      - node.name=elasticsearch
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - xpack.security.enabled=true
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - 9400:9200
+    networks: 
+      - esnet
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+networks:
+   esnet:
+volumes:
+  esdata:
+    driver: local
